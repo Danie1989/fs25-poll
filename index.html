@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-id="th-modified">FS25 Map Vote</title>
+    
+    <meta property="og:title" content="Web Page" data-id="th-modified">
+    <meta name="description" content="code" data-id="th-modified"><meta property="og:description" content="code" data-id="th-modified">
+    <meta property="og:image" content="https://tiiny.host" data-id="th-modified">
+    <meta property="og:image:width" content="1501" data-id="th-modified">
+    <meta property="og:image:height" content="1501" data-id="th-modified">
+    <meta property="og:image:type" content="image/png" data-id="th-modified">
+    <meta property="og:url" content="https://tiiny.site" data-id="th-modified">
+    <meta property="og:type" content="website" data-id="th-modified">
+    <script defer="" data-domain="scarlet-jan-81.tiiny.site" src="https://tiiny.net"></script>
+    <script type="text/javascript" src="https://tiiny.host"></script>
+    
+    <style>
+        body { font-family: Arial, sans-serif; background: #121212; color: #fff; max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; color: #4CAF50; }
+        .poll-card { background: #1e1e1e; border-radius: 10px; padding: 20px; margin-bottom: 20px; border: 1px solid #333; display: flex; gap: 20px; align-items: center; }
+        
+        /* Optimized Image Containers */
+        .map-link { display: block; flex-shrink: 0; text-decoration: none; position: relative; }
+        .map-img { width: 180px; height: 110px; object-fit: cover; border-radius: 5px; border: 1px solid #444; transition: transform 0.2s, border-color 0.2s; display: block; }
+        .map-link:hover .map-img { transform: scale(1.03); border-color: #4CAF50; }
+        .click-hint { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.75); color: #fff; font-size: 10px; text-align: center; padding: 3px 0; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; font-weight: bold; }
+        
+        .details { flex: 1; }
+        .details h2 { margin: 0 0 10px 0; font-size: 20px; color: #e0e0e0; }
+        .details p { margin: 0 0 10px 0; color: #aaa; font-size: 14px; }
+        .tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+        .tag { background: #2e7d32; padding: 3px 8px; border-radius: 3px; font-size: 11px; font-weight: bold; }
+        .vote-btn { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; max-width: 120px; }
+        .vote-btn:hover { background: #45a049; }
+        .voted { background: #555 !important; cursor: not-allowed; }
+        .results { font-size: 14px; color: #4CAF50; font-weight: bold; margin-top: 5px; display: none; }
+
+        /* Mobile Layout fix */
+        @media (max-width: 600px) {
+            .poll-card { flex-direction: column; text-align: center; align-items: center; }
+            .map-img { width: 100%; height: 160px; max-width: 320px; }
+            .tags { justify-content: center; }
+            .vote-btn { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🚜 Choose Our Next FS25 Server Map 🌾</h1>
+
+    <!-- Map 1: Geistal -->
+    <div class="poll-card" id="map1">
+        <a href="https://farming-simulator.com" target="_blank" class="map-link" title="Click to view Geistal on ModHub">
+            <img class="map-img" src="https://farming-simulator.com" alt="Geistal Screenshot">
+            <div class="click-hint">🌐 ModHub</div>
+        </a>
+        <div class="details">
+            <h2>🏔️ Geistal</h2>
+            <div class="tags"><span class="tag">Alps</span><span class="tag">Tight Roads</span><span class="tag">Hidden Farms</span></div>
+            <p>108 small fields (1-2 ha). Alpine mountain passes. Built-in multiplayer mode where farms stay hidden until bought.</p>
+            <div class="results" id="res1">0 votes (0%)</div>
+        </div>
+        <button class="vote-btn" onclick="castVote('map1')">Vote</button>
+    </div>
+
+    <!-- Map 2: Witcombe Park Farm -->
+    <div class="poll-card" id="map2">
+        <a href="https://oxygendavid.itch.io/witcombe-park-farm" target="_blank" class="map-link" title="Click to view Witcombe Park Farm on Itch.io">
+            <img class="map-img" src="https://img.itch.zone/aW1nLzI2MDY5MzMwLmpwZw==/original/6KDrzD.jpg" alt="Witcombe Park Farm Screenshot">
+            <div class="click-hint">🌐 Itch.io</div>
+        </a>
+        <div class="details">
+            <h2>🇬🇧 Witcombe Park Farm</h2>
+            <div class="tags"><span class="tag">UK</span><span class="tag">4 Yards</span><span class="tag">14 New Crops</span></div>
+            <p>60+ rolling fields with hedgerows. Features 4 fully developed yards ideal for 4 separate teams. Focuses heavily on livestock.</p>
+            <div class="results" id="res2">0 votes (0%)</div>
+        </div>
+        <button class="vote-btn" onclick="castVote('map2')">Vote</button>
+    </div>
+
+    <!-- Map 3: Gage, Kentucky -->
+    <div class="poll-card" id="map3">
+        <a href="https://www.gagefield.com/fs25.html" target="_blank" class="map-link" title="Click to view Gage, Kentucky site">
+            <img class="map-img" src="https://www.gagefield.com/images/gage/gage-map-hero-2.jpg" alt="Gage, Kentucky Screenshot">
+            <div class="click-hint">🌐 Map Site</div>
+        </a>
+        <div class="details">
+            <h2>🇺🇸 Gage, Kentucky</h2>
+            <div class="tags"><span class="tag">USA 4X</span><span class="tag">Big Machinery</span><span class="tag">Row Crop</span></div>
+            <p>140 massive fields (2,400+ acres). Pre-placed multi-player farms, wide roads, curved rows, and native double-cropping.</p>
+            <div class="results" id="res3">0 votes (0%)</div>
+        </div>
+        <button class="vote-btn" onclick="castVote('map3')">Vote</button>
+    </div>
+
+    <script>
+        let votes = { map1: 0, map2: 0, map3: 0 };
+        let hasVoted = false;
+
+        function castVote(mapId) {
+            if (hasVoted) return alert("You already voted!");
+            votes[mapId]++;
+            hasVoted = true;
+
+            const total = votes.map1 + votes.map2 + votes.map3;
+            
+            document.querySelectorAll('.vote-btn').forEach(btn => {
+                btn.classList.add('voted');
+                btn.innerText = "Voted";
+            });
+
+            updateResults(total);
+        }
+
+        function updateResults(total) {
+            ['map1', 'map2', 'map3'].forEach((id, index) => {
+                const count = votes[id];
+                const percent = total > 0 ? Math.round((count / total) * 100) : 0;
+                const resDiv = document.getElementById('res' + (index + 1));
+                resDiv.innerText = `${count} votes (${percent}%)`;
+                resDiv.style.display = 'block';
+            });
+        }
+    </script>
+          
+</body>
+</html>
