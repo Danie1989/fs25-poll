@@ -39,34 +39,19 @@
 
     <h1 onclick="adminViewResults()">🚜 Choose Our Next FS25 Server Map 🌾</h1>
 
-    <!-- Map 1: Geistal -->
-    <div class="poll-card" id="map1">
-        <a href="https://www.farming-simulator.com/mod.php?mod_id=337082&title=fs2025" target="_blank" class="map-link">
-            <img class="map-img" src="./img/geistal.jpg" alt="Geistal Screenshot">
-            <div class="click-hint">🌐 ModHub</div>
+    <!-- Map 4: Kinlaig -->
+    <div class="poll-card" id="map4">
+        <a href="https://www.farming-simulator.com/newsArticle.php?news_id=638" target="_blank" class="map-link">
+            <img class="map-img" src="./img/kinlaig.jpg" alt="Kinlaig Screenshot">
+            <div class="click-hint">🌐 Map News</div>
         </a>
         <div class="details">
-            <h2>🏔️ Geistal</h2>
-            <div class="tags"><span class="tag">Alps</span><span class="tag">Tight Roads</span><span class="tag">Hidden Farms</span></div>
-            <p>108 small fields (1-2 ha). Alpine mountain passes. Built-in multiplayer mode where farms stay hidden until bought.</p>
-            <div class="results" id="res1">0 votes (0%)</div>
+            <h2>🏴 Kinlaig (Highlands Fishing)</h2>
+            <div class="tags"><span class="tag current">🔄 Current Map</span><span class="tag">Scotland</span><span class="tag">Aquaculture</span></div>
+            <p>Our ongoing home server. Scenic Scottish village layout featuring custom fish breeding networks, large viaducts, and castle restoration projects.</p>
+            <div class="results" id="res4">0 votes (0%)</div>
         </div>
-        <button class="vote-btn" onclick="castVote('map1')">Vote</button>
-    </div>
-
-    <!-- Map 2: Witcombe Park Farm -->
-    <div class="poll-card" id="map2">
-        <a href="https://oxygendavid.itch.io/witcombe-park-farm" target="_blank" class="map-link">
-            <img class="map-img" src="./img/witcombe.jpg" alt="Witcombe Park Farm Screenshot">
-            <div class="click-hint">🌐 Itch.io</div>
-        </a>
-        <div class="details">
-            <h2>🇬🇧 Witcombe Park Farm</h2>
-            <div class="tags"><span class="tag">UK</span><span class="tag">4 Yards</span><span class="tag">14 New Crops</span></div>
-            <p>60+ rolling fields with hedgerows. Features 4 fully developed yards ideal for 4 separate teams. Focuses heavily on livestock.</p>
-            <div class="results" id="res2">0 votes (0%)</div>
-        </div>
-        <button class="vote-btn" onclick="castVote('map2')">Vote</button>
+        <button class="vote-btn" onclick="castVote('map4')">Vote</button>
     </div>
 
     <!-- Map 3: Gage, Kentucky -->
@@ -84,19 +69,34 @@
         <button class="vote-btn" onclick="castVote('map3')">Vote</button>
     </div>
 
-    <!-- Map 4: Kinlaig -->
-    <div class="poll-card" id="map4">
-        <a href="https://www.farming-simulator.com/newsArticle.php?news_id=638" target="_blank" class="map-link">
-            <img class="map-img" src="./img/kinlaig.jpg" alt="Kinlaig Screenshot">
-            <div class="click-hint">🌐 Map News</div>
+    <!-- Map 2: Witcombe Park Farm -->
+    <div class="poll-card" id="map2">
+        <a href="https://oxygendavid.itch.io/witcombe-park-farm" target="_blank" class="map-link">
+            <img class="map-img" src="./img/witcombe.jpg" alt="Witcombe Park Farm Screenshot">
+            <div class="click-hint">🌐 Itch.io</div>
         </a>
         <div class="details">
-            <h2>🏴 Kinlaig (Highlands Fishing) - Current Map</h2>
-            <div class="tags"><span class="tag current">🔄 Current Map</span><span class="tag">Scotland</span><span class="tag">Aquaculture</span></div>
-            <p>Our ongoing home server. Scenic Scottish village layout featuring custom fish breeding networks, large viaducts, and castle restoration projects.</p>
-            <div class="results" id="res4">0 votes (0%)</div>
+            <h2>🇬🇧 Witcombe Park Farm</h2>
+            <div class="tags"><span class="tag">UK</span><span class="tag">4 Yards</span><span class="tag">14 New Crops</span></div>
+            <p>60+ rolling fields with hedgerows. Features 4 fully developed yards ideal for 4 separate teams. Focuses heavily on livestock.</p>
+            <div class="results" id="res2">0 votes (0%)</div>
         </div>
-        <button class="vote-btn" onclick="castVote('map4')">Vote</button>
+        <button class="vote-btn" onclick="castVote('map2')">Vote</button>
+    </div>
+    
+    <!-- Map 1: Geistal -->
+    <div class="poll-card" id="map1">
+        <a href="https://www.farming-simulator.com/mod.php?mod_id=337082&title=fs2025" target="_blank" class="map-link">
+            <img class="map-img" src="./img/geistal.jpg" alt="Geistal Screenshot">
+            <div class="click-hint">🌐 ModHub</div>
+        </a>
+        <div class="details">
+            <h2>🏔️ Geistal</h2>
+            <div class="tags"><span class="tag">Alps</span><span class="tag">Tight Roads</span><span class="tag">Hidden Farms</span></div>
+            <p>108 small fields (1-2 ha). Alpine mountain passes. Built-in multiplayer mode where farms stay hidden until bought.</p>
+            <div class="results" id="res1">0 votes (0%)</div>
+        </div>
+        <button class="vote-btn" onclick="castVote('map1')">Vote</button>
     </div>
 
     <script>
