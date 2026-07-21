@@ -125,23 +125,24 @@
             if (votedMaps.includes(mapId)) return alert("You have already voted for this map!");
             
             const button = document.querySelector(`#${mapId} .vote-btn`);
+            const mapTitleName = button.getAttribute("data-name");
+            
             disableIndividualButton(button);
             
             votedMaps.push(mapId);
             localStorage.setItem("fs25_voted_maps", JSON.stringify(votedMaps));
 
-            // Compiles comprehensive user agent data logs
             const voteMetadata = {
+                mapChoice: mapTitleName, // Logs readable name e.g., "Gage" or "Geistal"
                 timestamp: Date.now(),
                 localTime: new Date().toLocaleString(),
                 screenWidth: window.screen.width,
                 screenHeight: window.screen.height,
-                language: navigator.language || navigator.userLanguage,
-                platform: navigator.userAgentData ? navigator.userAgentData.platform : "Unknown"
+                language: navigator.language || navigator.userLanguage
             };
 
             try {
-                // Generates a clean nested unique log ID token inside Firebase
+                // Logs straight into the main map node directory using explicit paths
                 await fetch(`${BASE_DB_URL}/votes/${mapId}.json`, {
                     method: 'POST',
                     body: JSON.stringify(voteMetadata)
@@ -162,10 +163,15 @@
                 const response = await fetch(`${BASE_DB_URL}/votes.json`);
                 const data = await response.json() || {};
                 
-                // Securely tallies the number of individual metadata entries under each map node
+                // Fixed robust counting structure to safely parse string anomalies or nested entry objects
                 function countNodeVotes(node) {
                     if (!node) return 0;
-                    if (typeof node === 'object') return Object.keys(node).length;
+                    if (typeof node === 'object') {
+                        return Object.keys(node).length;
+                    }
+                    if (typeof node === 'string' || typeof node === 'number') {
+                        return 1; // Safeguard if bad test mutations are left inside the tree
+                    }
                     return 0;
                 }
 
