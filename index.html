@@ -159,7 +159,8 @@
             if (input !== ADMIN_PASSWORD) return alert("Access denied.");
 
             const endpoints = ['map1', 'map2', 'map3', 'map4'];
-            let counts =; // Fixed syntax error array initialization
+            
+            let counts = [];
             let total = 0;
 
             try {
@@ -177,7 +178,7 @@
                     total += counts[i];
                 }
 
-                // Display calculations on screen
+                // Render metrics directly to interface strings
                 endpoints.forEach((id, index) => {
                     const count = counts[index];
                     const percent = total > 0 ? Math.round((count / total) * 100) : 0;
