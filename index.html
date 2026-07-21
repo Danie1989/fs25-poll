@@ -159,29 +159,33 @@
             if (input !== ADMIN_PASSWORD) return alert("Access denied.");
 
             const endpoints = ['map1', 'map2', 'map3', 'map4'];
-            
             let counts = [];
             let total = 0;
 
             try {
+                // Step 1: Collect all counts securely
                 for (let i = 0; i < endpoints.length; i++) {
                     const response = await fetch(`${BASE_DB_URL}/votes/${endpoints[i]}.json`);
                     const data = await response.json();
                     
+                    let mapCount = 0;
                     if (data) {
                         if (typeof data === 'object') {
-                            counts[i] = Object.keys(data).length;
+                            mapCount = Object.keys(data).length;
                         } else if (typeof data === 'string' || typeof data === 'number') {
-                            counts[i] = 1;
+                            mapCount = 1;
                         }
                     }
-                    total += counts[i];
+                    counts.push(mapCount);
+                    total += mapCount;
                 }
 
-                // Render metrics directly to interface strings
+                // Step 2: Render metrics and compute precise floating percentages
                 endpoints.forEach((id, index) => {
                     const count = counts[index];
+                    // Clean calculation prevents flat zeroing
                     const percent = total > 0 ? Math.round((count / total) * 100) : 0;
+                    
                     const resDiv = document.getElementById('res' + (index + 1));
                     resDiv.innerText = `${count} votes (${percent}%)`;
                     resDiv.style.display = 'block';
@@ -191,6 +195,7 @@
                 alert("Database secure connection error.");
             }
         }
+
     </script>
 
 </body>
