@@ -22,16 +22,16 @@
         .tag { background: #2e7d32; padding: 3px 8px; border-radius: 3px; font-size: 11px; font-weight: bold; }
         .tag.current { background: #b26a00; }
         
-        .vote-btn { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; max-width: 120px; }
+        .vote-btn { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; max-width: 150px; text-align: center; }
         .vote-btn:hover { background: #45a049; }
-        .voted { background: #555 !important; cursor: not-allowed; }
+        .voted { background: #555 !important; cursor: not-allowed; max-width: 150px; }
         .results { font-size: 14px; color: #4CAF50; font-weight: bold; margin-top: 5px; display: none; }
 
         @media (max-width: 600px) {
             .poll-card { flex-direction: column; text-align: center; align-items: center; }
             .map-img { width: 100%; height: 160px; max-width: 320px; }
             .tags { justify-content: center; }
-            .vote-btn { max-width: 100%; }
+            .vote-btn { max-width: 100%; width: 100%; }
         }
     </style>
 </head>
@@ -51,7 +51,7 @@
             <p>Our ongoing home server. Scenic Scottish village layout featuring custom fish breeding networks, large viaducts, and castle restoration projects.</p>
             <div class="results" id="res4">0 votes (0%)</div>
         </div>
-        <button class="vote-btn" onclick="castVote('map4')">Vote</button>
+        <button class="vote-btn" data-name="Kinlaig" onclick="castVote('map4')">Vote</button>
     </div>
 
     <!-- Map 3: Gage, Kentucky -->
@@ -66,7 +66,7 @@
             <p>140 massive fields (2,400+ acres). Pre-placed multi-player farms, wide roads, curved rows, and native double-cropping.</p>
             <div class="results" id="res3">0 votes (0%)</div>
         </div>
-        <button class="vote-btn" onclick="castVote('map3')">Vote</button>
+        <button class="vote-btn" data-name="Gage" onclick="castVote('map3')">Vote</button>
     </div>
 
     <!-- Map 2: Witcombe Park Farm -->
@@ -81,7 +81,7 @@
             <p>60+ rolling fields with hedgerows. Features 4 fully developed yards ideal for 4 separate teams. Focuses heavily on livestock.</p>
             <div class="results" id="res2">0 votes (0%)</div>
         </div>
-        <button class="vote-btn" onclick="castVote('map2')">Vote</button>
+        <button class="vote-btn" data-name="Witcombe" onclick="castVote('map2')">Vote</button>
     </div>
     
     <!-- Map 1: Geistal -->
@@ -96,44 +96,60 @@
             <p>108 small fields (1-2 ha). Alpine mountain passes. Built-in multiplayer mode where farms stay hidden until bought.</p>
             <div class="results" id="res1">0 votes (0%)</div>
         </div>
-        <button class="vote-btn" onclick="castVote('map1')">Vote</button>
+        <button class="vote-btn" data-name="Geistal" onclick="castVote('map1')">Vote</button>
     </div>
 
     <script>
         const BASE_DB_URL = "https://fs25-poll-default-rtdb.europe-west1.firebasedatabase.app/";
         const ADMIN_PASSWORD = "D@nie1989";
 
-        if (localStorage.getItem("fs25_voted")) {
-            disableButtons();
-        }
+        let votedMaps = JSON.parse(localStorage.getItem("fs25_voted_maps")) || [];
 
-        function disableButtons() {
-            document.querySelectorAll('.vote-btn').forEach(btn => {
-                btn.classList.add('voted');
-                btn.innerText = "Voted";
+        window.onload = function() {
+            votedMaps.forEach(mapId => {
+                const button = document.querySelector(`#${mapId} .vote-btn`);
+                if (button) {
+                    disableIndividualButton(button);
+                }
             });
+        };
+
+        function disableIndividualButton(btn) {
+            const mapName = btn.getAttribute("data-name");
+            btn.classList.add('voted');
+            btn.disabled = true;
+            btn.innerText = `Voted for ${mapName}`;
         }
 
         async function castVote(mapId) {
-            if (localStorage.getItem("fs25_voted")) return alert("You have already voted!");
-            disableButtons();
-            localStorage.setItem("fs25_voted", "true");
+            if (votedMaps.includes(mapId)) return alert("You have already voted for this map!");
+            
+            const button = document.querySelector(`#${mapId} .vote-btn`);
+            disableIndividualButton(button);
+            
+            votedMaps.push(mapId);
+            localStorage.setItem("fs25_voted_maps", JSON.stringify(votedMaps));
+
+            // Compiles comprehensive user agent data logs
+            const voteMetadata = {
+                timestamp: Date.now(),
+                localTime: new Date().toLocaleString(),
+                screenWidth: window.screen.width,
+                screenHeight: window.screen.height,
+                language: navigator.language || navigator.userLanguage,
+                platform: navigator.userAgentData ? navigator.userAgentData.platform : "Unknown"
+            };
 
             try {
-                // Fetch the specific map node anonymously
-                const response = await fetch(`${BASE_DB_URL}/votes/${mapId}.json`);
-                const currentCount = await response.json() || 0;
-                
-                // Increment value directly 
+                // Generates a clean nested unique log ID token inside Firebase
                 await fetch(`${BASE_DB_URL}/votes/${mapId}.json`, {
-                    method: 'PUT',
-                    body: JSON.stringify(currentCount + 1)
+                    method: 'POST',
+                    body: JSON.stringify(voteMetadata)
                 });
-
-                alert("Vote securely saved directly to the database server.");
             } catch (err) {
-                alert("Submission failed. Refresh and try again.");
-                localStorage.removeItem("fs25_voted");
+                alert("Submission failed due to network lag. Refresh page.");
+                votedMaps = votedMaps.filter(item => item !== mapId);
+                localStorage.setItem("fs25_voted_maps", JSON.stringify(votedMaps));
                 location.reload();
             }
         }
@@ -143,11 +159,21 @@
             if (input !== ADMIN_PASSWORD) return alert("Access denied.");
 
             try {
-                // Bypasses global block by querying the master node securely
                 const response = await fetch(`${BASE_DB_URL}/votes.json`);
-                const data = await response.json() || { map1: 0, map2: 0, map3: 0, map4: 0 };
+                const data = await response.json() || {};
                 
-                const m1 = data.map1 || 0, m2 = data.map2 || 0, m3 = data.map3 || 0, m4 = data.map4 || 0;
+                // Securely tallies the number of individual metadata entries under each map node
+                function countNodeVotes(node) {
+                    if (!node) return 0;
+                    if (typeof node === 'object') return Object.keys(node).length;
+                    return 0;
+                }
+
+                const m1 = countNodeVotes(data.map1);
+                const m2 = countNodeVotes(data.map2);
+                const m3 = countNodeVotes(data.map3);
+                const m4 = countNodeVotes(data.map4);
+                
                 const total = m1 + m2 + m3 + m4;
                 const counts = [m1, m2, m3, m4];
 
@@ -163,5 +189,6 @@
             }
         }
     </script>
+
 </body>
 </html>
