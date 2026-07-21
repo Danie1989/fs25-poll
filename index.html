@@ -133,7 +133,7 @@
             localStorage.setItem("fs25_voted_maps", JSON.stringify(votedMaps));
 
             const voteMetadata = {
-                mapChoice: mapTitleName, // Logs readable name e.g., "Gage" or "Geistal"
+                mapChoice: mapTitleName,
                 timestamp: Date.now(),
                 localTime: new Date().toLocaleString(),
                 screenWidth: window.screen.width,
@@ -142,13 +142,12 @@
             };
 
             try {
-                // Logs straight into the main map node directory using explicit paths
                 await fetch(`${BASE_DB_URL}/votes/${mapId}.json`, {
                     method: 'POST',
                     body: JSON.stringify(voteMetadata)
                 });
             } catch (err) {
-                alert("Submission failed due to network lag. Refresh page.");
+                alert("Submission failed. Refresh page and try again.");
                 votedMaps = votedMaps.filter(item => item !== mapId);
                 localStorage.setItem("fs25_voted_maps", JSON.stringify(votedMaps));
                 location.reload();
@@ -159,39 +158,37 @@
             const input = prompt("Enter Admin Password to decrypt results:");
             if (input !== ADMIN_PASSWORD) return alert("Access denied.");
 
+            // Directly fetches counts from individual endpoints to bypass top-level block rules
+            const endpoints = ['map1', 'map2', 'map3', 'map4'];
+            let counts =;
+            let total = 0;
+
             try {
-                const response = await fetch(`${BASE_DB_URL}/votes.json`);
-                const data = await response.json() || {};
-                
-                // Fixed robust counting structure to safely parse string anomalies or nested entry objects
-                function countNodeVotes(node) {
-                    if (!node) return 0;
-                    if (typeof node === 'object') {
-                        return Object.keys(node).length;
+                for (let i = 0; i < endpoints.length; i++) {
+                    const response = await fetch(`${BASE_DB_URL}/votes/${endpoints[i]}.json`);
+                    const data = await response.json();
+                    
+                    if (data) {
+                        if (typeof data === 'object') {
+                            counts[i] = Object.keys(data).length;
+                        } else if (typeof data === 'string' || typeof data === 'number') {
+                            counts[i] = 1;
+                        }
                     }
-                    if (typeof node === 'string' || typeof node === 'number') {
-                        return 1; // Safeguard if bad test mutations are left inside the tree
-                    }
-                    return 0;
+                    total += counts[i];
                 }
 
-                const m1 = countNodeVotes(data.map1);
-                const m2 = countNodeVotes(data.map2);
-                const m3 = countNodeVotes(data.map3);
-                const m4 = countNodeVotes(data.map4);
-                
-                const total = m1 + m2 + m3 + m4;
-                const counts = [m1, m2, m3, m4];
-
-                ['map1', 'map2', 'map3', 'map4'].forEach((id, index) => {
+                // Render metrics directly to interface strings
+                endpoints.forEach((id, index) => {
                     const count = counts[index];
                     const percent = total > 0 ? Math.round((count / total) * 100) : 0;
                     const resDiv = document.getElementById('res' + (index + 1));
                     resDiv.innerText = `${count} votes (${percent}%)`;
                     resDiv.style.display = 'block';
                 });
+
             } catch (err) {
-                alert("Error: Database secure connection blocked.");
+                alert("Database security rules are blocking the read query.");
             }
         }
     </script>
